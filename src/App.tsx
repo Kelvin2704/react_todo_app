@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import AddTodo from './components/AddTodo';
 import TodoItem from './components/TodoItem';
 import TodoList from './components/TodoList';
+import { FaSquarePen } from "react-icons/fa6";
 
-type Todo = {
+interface Todo {
   id: number
   text: string
   completed: boolean
@@ -21,12 +22,15 @@ function App() {
       setEditID(null);
       setEditText('')
     } else {
-      const newTodo: Todo = { id: Date.now(), text: text, completed: false };
+      const newTodo: Todo = { id: Date.now(), text, completed: false };
       setTodos([...todos, newTodo])
     }
   }
   const deleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id))
+    setTodos(todos.filter(todo => todo.id !== id));
+    setIsEditing(false);
+    setEditID(null);
+    setEditText('')
   }
   const toggleTodo = (id: number) => {
     setTodos(todos.map(todo => (
@@ -43,13 +47,21 @@ function App() {
   const startEditing = (id: number, text: string) => {
     setIsEditing(true);
     setEditID(id);
-    setEditText(text)
+    setEditText(text);
+    console.log(editID)
   }
 
   return (
-    <div className=" text-xl">
-      <AddTodo isEditing={isEditing} editText={editText} setEditText={setEditText} addTodo={addTodo} />
-      <TodoList todos={todos} deleteTodo={deleteTodo} toggleTodo={toggleTodo} startEditing={startEditing} />
+    <div className='bg-slate-900 text-slate-200'>
+      <div className="container max-w-screen-sm mx-auto py-10">
+        <div className='space-y-3'>
+          <h1 className='text-6xl underline underline-offset-8 decoration-yellow-400 text-slate-200 font-bold w-full flex items-center justify-center gap-1 p-3'>Just do it! </h1>
+          <div className='space-y-2'>
+            <AddTodo isEditing={isEditing} editText={editText} setEditText={setEditText} addTodo={addTodo} />
+            <TodoList todos={todos} deleteTodo={deleteTodo} toggleTodo={toggleTodo} startEditing={startEditing} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
